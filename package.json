@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "lint": "eslint app.ts"
+    "lint": "eslint app.ts",
+    "db:create": "npx sequelize-cli-typescript db:create"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "node-postgres": "^0.6.2",
     "pg": "^8.7.1",
