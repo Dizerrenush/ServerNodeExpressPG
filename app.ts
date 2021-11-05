@@ -1,10 +1,23 @@
-import express from 'express';
 
-const PORT = process.env.PORT ||  8081;
-const app = express();
+import bodyParser from 'body-parser';
+import express from'express';
+import cors from 'cors';
 
-app.get('/',(req, res) => {
-    res.send('NODEMON started')
+//Database Connection
+import db from "./src/database/connect";
+db.authenticate().then(() => {
+    console.log('Database connected...');
+}).catch(err => {
+    console.log('Error: ' + err);
 })
 
-app.listen(PORT,()=>console.log(`server started on port ${PORT}`))
+const app = express();
+
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+app.use(cors("*"));
+
+const PORT = process.env.PORT || 5000;
+db.sync().then(() => {
+    app.listen(PORT, ()=> console.log(`Server started on port ${PORT}`));
+}).catch(err => console.log("Error: " + err));
