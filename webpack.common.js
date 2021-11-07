@@ -1,3 +1,4 @@
+
 const path = require("path");
 const TerserPlugin = require("terser-webpack-plugin");
 const webpack = require("webpack");
@@ -6,7 +7,7 @@ function resolve(dir) {
   return path.join(__dirname, "..", dir);
 }
 module.exports = {
-  entry: path.resolve(__dirname, "src/main.ts"),
+  entry: path.resolve(__dirname, "src/app.ts"),
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "./js/[name].[contenthash].js",
@@ -15,6 +16,19 @@ module.exports = {
   resolve: {
     alias: {
       "@": resolve("src"),
+    },
+    fallback: {
+      "fs": false,
+      "os": false,
+      "net":false,
+      "buffer": require.resolve("buffer/"),
+      "util": require.resolve("util/"),
+      "http": require.resolve("stream-http"),
+      "path": require.resolve("path-browserify"),
+      "assert": require.resolve("assert/"),
+      "crypto": require.resolve("crypto-browserify"),
+      "stream": require.resolve("stream-browserify"),
+      "zlib": require.resolve("browserify-zlib")
     },
     extensions: [ ".ts", ".js", ".json"],
   },
@@ -38,11 +52,7 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new webpack.DefinePlugin({
-      "process.env": JSON.stringify(dotenv.config().parsed),
-    }),
-  ],
+
   optimization: {
     splitChunks: {
       chunks: "all",
