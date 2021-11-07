@@ -1,13 +1,14 @@
+/*
 
 import express from 'express';
 import ClientController from '../controllers/ClientController';
-
+const client = new ClientController();
 const router = express.Router();
 
-router.post('/', ClientController.create());
-router.get('/', ClientController.find());
-router.get('/:id', ClientController.findAll());
-router.put('/:id', ClientController.update());
-router.delete('/:id', ClientController.delete());
+router.post('/', client.create());
+router.get('/', client.findById());
+router.get('/:id', client.findAll());
+router.put('/:id', client.update());
+router.delete('/:id', client.deleteById());
 
-module.exports = router;
+module.exports = router;*/
