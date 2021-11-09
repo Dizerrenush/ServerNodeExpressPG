@@ -1,25 +1,22 @@
-
 import type {Request, Response} from "express";
 
 import db from '../database/connect';
-import Model from "../models/client.model";
-import BaseController from "@/controllers/BaseController";
+import Model from "../models/feedback.model";
 
 const ModelInstance = Model(db);
 
-export class ClientController extends BaseController<IClientController>{
+//TODO interface IControllerItem
+export default abstract class BaseController <T extends IControllerItem> {
+    async create(item: T) {
+        //TODO validation
 
-    async create(req: Request, res: Response) {
         try {
-            const model = await ModelInstance.create({ ...req.body });
-            return res.json({ model, msg: "Successfully create model" });
-        } catch (e) {
-            return res.json({
-                msg: "fail to create",
-                status: 500,
-                route: "/create"
-            });
+            return ModelInstance.create(item);
+        }catch (e){
+
         }
+
+
     }
 
     async findAll(req: Request, res: Response) {
@@ -100,5 +97,3 @@ export class ClientController extends BaseController<IClientController>{
         }
     }
 }
-
-export default new ClientController();

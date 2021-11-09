@@ -1,13 +1,15 @@
 
 const path = require("path");
 const TerserPlugin = require("terser-webpack-plugin");
-const webpack = require("webpack");
-const dotenv = require("dotenv");
+const nodeExternals = require('webpack-node-externals');
 function resolve(dir) {
   return path.join(__dirname, "..", dir);
 }
 module.exports = {
   entry: path.resolve(__dirname, "src/app.ts"),
+  target: 'node',
+  externalsPresets: { node: true },
+  externals: [nodeExternals()],
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "./js/[name].[contenthash].js",
@@ -52,7 +54,6 @@ module.exports = {
       },
     ],
   },
-
   optimization: {
     splitChunks: {
       chunks: "all",
