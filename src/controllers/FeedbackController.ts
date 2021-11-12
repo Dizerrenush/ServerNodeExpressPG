@@ -1,12 +1,6 @@
-import type {Request, Response} from "express";
-
-import db from '../database/connect';
-import Model from "../models/feedback.model";
-import iFeedback from "@/validation/feedback";
 import BaseController from "@/controllers/BaseController";
+import {IControllerItem} from "@/controllers/types/types";
 
-const ModelInstance = Model(db);
-
-export default class FeedbackController extends BaseController<IFeedbackController>{
+export default class FeedbackController extends BaseController<IControllerItem.IFeedback>{
 
 }

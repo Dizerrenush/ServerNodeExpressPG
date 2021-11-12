@@ -1,25 +1,28 @@
 import express from 'express';
 import ClientValidator from '../validation/client';
-import ClientController from '../controllers/ClientController';
+import ExpressWrapperController from '../controllers/ExpressWrapperController';
+import {ClientController} from "@/controllers/ClientController";
+
+const Client = new ExpressWrapperController(ClientController)
 
 const router = express.Router();
 
 router.post(
     '/create',
     ClientValidator.checkCreate(),
-    ClientController.create
+    Client.create
 );
 
 router.get(
     '/read',
     ClientValidator.checkRead(),
-    ClientController.findAll
+    Client.findAll
 );
 
 router.get(
     '/read/:id',
     ClientValidator.checkIdParam(),
-    ClientController.find
+    Client.find
 );
 
 router.put(

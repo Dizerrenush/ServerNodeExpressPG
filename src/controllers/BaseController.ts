@@ -1,99 +1,69 @@
-import type {Request, Response} from "express";
-
 import db from '../database/connect';
 import Model from "../models/feedback.model";
+import {IControllerItem, IControllerMethods} from "@/controllers/types/types";
 
 const ModelInstance = Model(db);
 
-//TODO interface IControllerItem
-export default abstract class BaseController <T extends IControllerItem> {
+export default abstract class BaseController<T extends IControllerItem.IBase> {
+
     async create(item: T) {
-        //TODO validation
 
         try {
             return ModelInstance.create(item);
-        }catch (e){
-
-        }
-
-
-    }
-
-    async findAll(req: Request, res: Response) {
-        try {
-            const limit = (req.query.limit as number | undefined) || 10;
-            const offset = req.query.offset as number | undefined;
-
-            const models = await ModelInstance.findAll({where: {}, limit, offset});
-            return res.json(models);
         } catch (e) {
-            return res.json({
-                msg: "fail to find all",
-                status: 500,
-                route: "/list"
-            });
+
+        }
+
+    }
+
+    async findAll(options: IControllerMethods.IFindAllOptions) {
+        try {
+            const limit = options.limit;
+            const offset = options.offset;
+            return ModelInstance.findAll({where: {}, limit, offset});
+        } catch (e) {
+
         }
     }
 
-    async find(req: Request, res: Response) {
+    async findOne(id: number) {
         try {
-            const {id} = req.params;
+            return ModelInstance.findOne({where: {id}});
+
+        } catch (e) {
+
+        }
+    }
+
+    async update(id: number, data: T) {
+        try {
+
             const model = await ModelInstance.findOne({where: {id}});
 
-            if (!model) {
-                return res.json({msg: "Can not find model"});
+            if (model) {
+                return model.update({...data});
             }
 
-            return res.json({model, msg: "model find"});
+            return false;
 
         } catch (e) {
-            return res.json({
-                msg: "fail to get",
-                status: 500,
-                route: "/find/:id",
-            });
+
         }
     }
 
-    async update(req: Request, res: Response) {
+    async delete(id: number) {
         try {
-            const {id} = req.params;
+
             const model = await ModelInstance.findOne({where: {id}});
 
-            if (!model) {
-                return res.json({msg: "Can not find model"});
+            if (model) {
+                return await model.destroy();
             }
 
-            const updatedModel = await model.update({...req.body});
-            return res.json({updatedModel, msg: "model updated"});
+            return false;
 
         } catch (e) {
-            return res.json({
-                msg: "fail to update",
-                status: 500,
-                route: "/update/:id",
-            });
-        }
-    }
 
-    async delete(req: Request, res: Response) {
-        try {
-            const {id} = req.params;
-            const model = await ModelInstance.findOne({where: {id}});
-
-            if (!model) {
-                return res.json({msg: "Can not find model"});
-            }
-
-            const deletedModel = await model.destroy();
-            return res.json({deletedModel, msg: "Model deleted"});
-
-        } catch (e) {
-            return res.json({
-                msg: "fail to delete",
-                status: 500,
-                route: "/delete/:id",
-            });
         }
     }
 }
