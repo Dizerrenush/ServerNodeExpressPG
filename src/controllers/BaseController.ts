@@ -26,7 +26,7 @@ export default abstract class BaseController<T extends IControllerItem.IBase> {
         }
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         try {
             return ModelInstance.findOne({where: {id}});
 
