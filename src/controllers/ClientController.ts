@@ -1,8 +1,6 @@
 
-import BaseController from "@/controllers/BaseController";
-import {IControllerItem} from "@/controllers/types/types";
+import BaseController from "./BaseController";
+import {IControllerItem} from "./types/types";
 
 export class ClientController extends BaseController<IControllerItem.IClient>{
 }
-
-export default new ClientController();

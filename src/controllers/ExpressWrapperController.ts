@@ -1,7 +1,7 @@
 
-import type BaseController from "@/controllers/BaseController";
+import type BaseController from "./BaseController";
 import {Request, Response} from "express";
-import {IControllerItem} from "@/controllers/types/types";
+import {IControllerItem} from "./types/types";
 
 export default class ExpressWrapperController<T extends IControllerItem.IBase> {
     _controller;

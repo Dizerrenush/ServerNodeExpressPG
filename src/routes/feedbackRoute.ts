@@ -1,40 +1,41 @@
 import express from 'express';
-import ClientValidator from '../validation/client';
+import FeedbackValidator from '../validation/feedback';
 import ExpressWrapperController from '../controllers/ExpressWrapperController';
-import {ClientController} from "@/controllers/ClientController";
+import {FeedbackController} from '../controllers/FeedbackController';
 
-const Client = new ExpressWrapperController(ClientController)
+const Controller = new FeedbackController();
+const Feedback = new ExpressWrapperController(Controller);
 
 const router = express.Router();
 
 router.post(
     '/create',
-    ClientValidator.checkCreate(),
-    Client.create
+    FeedbackValidator.checkCreate(),
+    Feedback.create
 );
 
 router.get(
     '/read',
-    ClientValidator.checkRead(),
-    Client.findAll
+    FeedbackValidator.checkRead(),
+    Feedback.findAll
 );
 
 router.get(
     '/read/:id',
-    ClientValidator.checkIdParam(),
-    Client.find
+    FeedbackValidator.checkIdParam(),
+    Feedback.find
 );
 
 router.put(
     '/update/:id',
-    ClientValidator.checkIdParam(),
-    ClientController.update
+    FeedbackValidator.checkIdParam(),
+    Feedback.update
 );
 
 router.delete(
     '/delete/:id',
-    ClientValidator.checkIdParam(),
-    ClientController.delete
+    FeedbackValidator.checkIdParam(),
+    Feedback.delete
 );
 
 export default router;

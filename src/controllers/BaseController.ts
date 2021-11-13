@@ -1,6 +1,7 @@
+
 import db from '../database/connect';
 import Model from "../models/feedback.model";
-import {IControllerItem, IControllerMethods} from "@/controllers/types/types";
+import {IControllerItem, IControllerMethods} from "./types/types";
 
 const ModelInstance = Model(db);
 
@@ -11,7 +12,7 @@ export default abstract class BaseController<T extends IControllerItem.IBase> {
         try {
             return ModelInstance.create(item);
         } catch (e) {
-
+            console.log(e)
         }
 
     }
@@ -22,7 +23,7 @@ export default abstract class BaseController<T extends IControllerItem.IBase> {
             const offset = options.offset;
             return ModelInstance.findAll({where: {}, limit, offset});
         } catch (e) {
-
+            console.log(e)
         }
     }
 
@@ -31,7 +32,7 @@ export default abstract class BaseController<T extends IControllerItem.IBase> {
             return ModelInstance.findOne({where: {id}});
 
         } catch (e) {
-
+            console.log(e)
         }
     }
 
@@ -47,7 +48,7 @@ export default abstract class BaseController<T extends IControllerItem.IBase> {
             return false;
 
         } catch (e) {
-
+            console.log(e)
         }
     }
 
@@ -63,7 +64,7 @@ export default abstract class BaseController<T extends IControllerItem.IBase> {
             return false;
 
         } catch (e) {
-
+            console.log(e)
         }
     }
 }

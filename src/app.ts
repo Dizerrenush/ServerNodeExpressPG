@@ -11,14 +11,15 @@ const PORT = process.env.PORT || 8080;
 const corsOptions = {
     origin: process.env.CORS_ORIGIN
 };
+const baseRoute ='/api/v1';
+const dataSize = '50mb';
 
-
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+app.use(bodyParser.json({ limit: dataSize }));
+app.use(bodyParser.urlencoded({ extended: true, limit: dataSize }));
 app.use(cors(corsOptions));
-//TODO constant
-app.use("/api/v1", clientRoute);
-app.use("/api/v1", feedbackRoute);
+
+app.use(baseRoute + "/client", clientRoute);
+app.use(baseRoute + "/feedback", feedbackRoute);
 
 init().then(() => {
     app.listen(PORT, ()=> console.log(`Server started on port ${PORT}`));

@@ -2,9 +2,7 @@
 const path = require("path");
 const TerserPlugin = require("terser-webpack-plugin");
 const nodeExternals = require('webpack-node-externals');
-function resolve(dir) {
-  return path.join(__dirname, "..", dir);
-}
+
 module.exports = {
   entry: path.resolve(__dirname, "src/app.ts"),
   target: 'node',
@@ -16,9 +14,6 @@ module.exports = {
     clean: true,
   },
   resolve: {
-    alias: {
-      "@": resolve("src"),
-    },
     fallback: {
       "fs": false,
       "os": false,

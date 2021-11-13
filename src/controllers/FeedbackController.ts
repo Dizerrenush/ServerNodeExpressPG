@@ -1,6 +1,6 @@
-import BaseController from "@/controllers/BaseController";
-import {IControllerItem} from "@/controllers/types/types";
+import BaseController from "./BaseController";
+import {IControllerItem} from "./types/types";
 
-export default class FeedbackController extends BaseController<IControllerItem.IFeedback>{
+export class FeedbackController extends BaseController<IControllerItem.IFeedback>{
 
 }

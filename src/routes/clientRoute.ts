@@ -1,9 +1,10 @@
 import express from 'express';
 import ClientValidator from '../validation/client';
 import ExpressWrapperController from '../controllers/ExpressWrapperController';
-import {ClientController} from "@/controllers/ClientController";
+import {ClientController} from "../controllers/ClientController";
 
-const Client = new ExpressWrapperController(ClientController)
+const Controller = new ClientController();
+const Client = new ExpressWrapperController(Controller)
 
 const router = express.Router();
 
@@ -28,13 +29,13 @@ router.get(
 router.put(
     '/update/:id',
     ClientValidator.checkIdParam(),
-    ClientController.update
+    Client.update
 );
 
 router.delete(
     '/delete/:id',
     ClientValidator.checkIdParam(),
-    ClientController.delete
+    Client.delete
 );
 
 export default router;
