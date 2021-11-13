@@ -2,7 +2,7 @@
 import { body } from 'express-validator';
 import { BaseValidator } from './base'
 
-class ClientValidator extends BaseValidator{
+export class FeedbackValidator extends BaseValidator{
 
     checkCreate() {
         return [
@@ -17,4 +17,4 @@ class ClientValidator extends BaseValidator{
 
 }
 
-export default new ClientValidator();
+export default new FeedbackValidator();

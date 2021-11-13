@@ -1,41 +1,11 @@
-import express from 'express';
-import ClientValidator from '../validation/client';
-import ExpressWrapperController from '../controllers/ExpressWrapperController';
-import {ClientController} from "../controllers/ClientController";
 
-const Controller = new ClientController();
-const Client = new ExpressWrapperController(Controller)
+import type{IControllerItem} from "../controllers/types/types";
+import type ExpressWrapperController from "../controllers/ExpressWrapperController";
+import type {ClientValidator} from '../validation/client';
+import {createRoute} from "./baseRoute";
 
-const router = express.Router();
+export default function createClientRoute(controller: ExpressWrapperController<IControllerItem.IClient>,validator: ClientValidator ) {
 
-router.post(
-    '/create',
-    ClientValidator.checkCreate(),
-    Client.create
-);
+    return createRoute(controller,validator) ;
 
-router.get(
-    '/read',
-    ClientValidator.checkRead(),
-    Client.findAll
-);
-
-router.get(
-    '/read/:id',
-    ClientValidator.checkIdParam(),
-    Client.find
-);
-
-router.put(
-    '/update/:id',
-    ClientValidator.checkIdParam(),
-    Client.update
-);
-
-router.delete(
-    '/delete/:id',
-    ClientValidator.checkIdParam(),
-    Client.delete
-);
-
-export default router;
+}

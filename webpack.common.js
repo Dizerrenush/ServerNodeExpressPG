@@ -10,7 +10,7 @@ module.exports = {
   externals: [nodeExternals()],
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "./js/[name].[contenthash].js",
+    filename: "./js/[name].js",
     clean: true,
   },
   resolve: {

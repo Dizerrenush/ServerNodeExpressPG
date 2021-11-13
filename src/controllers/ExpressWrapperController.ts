@@ -4,7 +4,9 @@ import {Request, Response} from "express";
 import {IControllerItem} from "./types/types";
 
 export default class ExpressWrapperController<T extends IControllerItem.IBase> {
-    _controller;
+
+    private readonly _controller: BaseController<T>;
+
     constructor(controller: BaseController<T>) {
         this._controller = controller;
     }
@@ -16,13 +18,19 @@ export default class ExpressWrapperController<T extends IControllerItem.IBase> {
         const options = {
             limit:limit,
             offset:offset,
-        }
+        };
+
         try {
             const models = await this._controller.findAll(options)
             return res.json(models);
-        } catch (e) {
+        }
+        catch (e) {
+
             return res.json({
-                msg: "fail to find all",
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                msg: e.toString(),
+                controller:this._controller,
                 status: 500,
                 route: "/list"
             });
@@ -33,9 +41,11 @@ export default class ExpressWrapperController<T extends IControllerItem.IBase> {
         try {
             const model = await this._controller.create({ ...req.body });
             return res.json({ model, msg: "Successfully create model" });
-        } catch (e) {
+        }
+
+        catch (e) {
             return res.json({
-                msg: "fail to create",
+                msg: e,
                 status: 500,
                 route: "/create"
             });
@@ -52,10 +62,10 @@ export default class ExpressWrapperController<T extends IControllerItem.IBase> {
             }
 
             return res.json({model, msg: "model find"});
-
-        } catch (e) {
+        }
+        catch (e) {
             return res.json({
-                msg: "fail to get",
+                msg: e,
                 status: 500,
                 route: "/find/:id",
             });
@@ -74,9 +84,10 @@ export default class ExpressWrapperController<T extends IControllerItem.IBase> {
             const updatedModel = await model.update({...req.body});
             return res.json({updatedModel, msg: "model updated"});
 
-        } catch (e) {
+        }
+        catch (e) {
             return res.json({
-                msg: "fail to update",
+                msg: e,
                 status: 500,
                 route: "/update/:id",
             });
@@ -95,9 +106,10 @@ export default class ExpressWrapperController<T extends IControllerItem.IBase> {
             const deletedModel = await model.destroy();
             return res.json({deletedModel, msg: "Model deleted"});
 
-        } catch (e) {
+        }
+        catch (e) {
             return res.json({
-                msg: "fail to delete",
+                msg: e,
                 status: 500,
                 route: "/delete/:id",
             });

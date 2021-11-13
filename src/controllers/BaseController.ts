@@ -1,17 +1,20 @@
 
-import db from '../database/connect';
-import Model from "../models/feedback.model";
 import {IControllerItem, IControllerMethods} from "./types/types";
 
-const ModelInstance = Model(db);
-
 export default abstract class BaseController<T extends IControllerItem.IBase> {
+
+    private _model: T;
+
+    constructor(model: T) {
+        this._model = model;
+    }
 
     async create(item: T) {
 
         try {
-            return ModelInstance.create(item);
-        } catch (e) {
+            return this._model.create(item);
+        }
+        catch (e) {
             console.log(e)
         }
 
@@ -19,19 +22,23 @@ export default abstract class BaseController<T extends IControllerItem.IBase> {
 
     async findAll(options: IControllerMethods.IFindAllOptions) {
         try {
+
             const limit = options.limit;
             const offset = options.offset;
-            return ModelInstance.findAll({where: {}, limit, offset});
-        } catch (e) {
+
+            return this._model.findAll({where: {}, limit, offset});
+        }
+        catch (e) {
             console.log(e)
         }
     }
 
     async findOne(id: string) {
         try {
-            return ModelInstance.findOne({where: {id}});
+            return this._model.findOne({where: {id}});
 
-        } catch (e) {
+        }
+        catch (e) {
             console.log(e)
         }
     }
@@ -39,7 +46,7 @@ export default abstract class BaseController<T extends IControllerItem.IBase> {
     async update(id: number, data: T) {
         try {
 
-            const model = await ModelInstance.findOne({where: {id}});
+            const model = await this._model.findOne({where: {id}});
 
             if (model) {
                 return model.update({...data});
@@ -47,7 +54,8 @@ export default abstract class BaseController<T extends IControllerItem.IBase> {
 
             return false;
 
-        } catch (e) {
+        }
+        catch (e) {
             console.log(e)
         }
     }
@@ -55,7 +63,7 @@ export default abstract class BaseController<T extends IControllerItem.IBase> {
     async delete(id: number) {
         try {
 
-            const model = await ModelInstance.findOne({where: {id}});
+            const model = await this._model.findOne({where: {id}});
 
             if (model) {
                 return await model.destroy();
@@ -63,7 +71,8 @@ export default abstract class BaseController<T extends IControllerItem.IBase> {
 
             return false;
 
-        } catch (e) {
+        }
+        catch (e) {
             console.log(e)
         }
     }

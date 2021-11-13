@@ -1,41 +1,11 @@
-import express from 'express';
-import FeedbackValidator from '../validation/feedback';
-import ExpressWrapperController from '../controllers/ExpressWrapperController';
-import {FeedbackController} from '../controllers/FeedbackController';
 
-const Controller = new FeedbackController();
-const Feedback = new ExpressWrapperController(Controller);
+import type{IControllerItem} from "../controllers/types/types";
+import type ExpressWrapperController from "../controllers/ExpressWrapperController";
+import type {FeedbackValidator} from '../validation/feedback';
+import {createRoute} from "./baseRoute";
 
-const router = express.Router();
+export default function createFeedbackRoute(controller: ExpressWrapperController<IControllerItem.IClient>,validator: FeedbackValidator ) {
 
-router.post(
-    '/create',
-    FeedbackValidator.checkCreate(),
-    Feedback.create
-);
+    return createRoute(controller,validator) ;
 
-router.get(
-    '/read',
-    FeedbackValidator.checkRead(),
-    Feedback.findAll
-);
-
-router.get(
-    '/read/:id',
-    FeedbackValidator.checkIdParam(),
-    Feedback.find
-);
-
-router.put(
-    '/update/:id',
-    FeedbackValidator.checkIdParam(),
-    Feedback.update
-);
-
-router.delete(
-    '/delete/:id',
-    FeedbackValidator.checkIdParam(),
-    Feedback.delete
-);
-
-export default router;
+}

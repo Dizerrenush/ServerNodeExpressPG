@@ -1,6 +1,6 @@
 import { body } from 'express-validator';
 import { BaseValidator } from './base'
-class ClientValidator extends BaseValidator{
+export class ClientValidator extends BaseValidator{
     checkCreate() {
         return [
             body('fullname')
