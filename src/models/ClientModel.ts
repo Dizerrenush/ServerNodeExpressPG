@@ -1,9 +1,8 @@
 import {DataTypes} from "sequelize";
 import type {Sequelize} from "sequelize";
-import type {IModel} from "@/models/types/types";
 
 export default (db: Sequelize) => {
-    return db.define<IModel.IClient>('client', {
+    return db.define('client', {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,

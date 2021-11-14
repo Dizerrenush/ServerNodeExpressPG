@@ -4,18 +4,19 @@ import type {ModelCtor} from "sequelize-typescript";
 import {IModelAttributes} from "@/models/types/types";
 import {Model} from "sequelize-typescript";
 
-export default abstract class BaseController<T,I extends IModelAttributes.IBase>{
+export default abstract class BaseController<I extends IModelAttributes.IBase>{
 
     private _model: ModelCtor<Model<I>>;
 
-    constructor(model: T) {
+    constructor(model: ModelCtor<Model<I>>) {
         this._model = model;
     }
 
-    async create(item:I) {
+    async create(item: I): Promise<I | undefined> {
 
         try {
-            return this._model.create(item);
+            const model = await this._model.create(item);
+            return model.get({plain:true});
         }
         catch (e) {
             console.log(e)
@@ -23,13 +24,14 @@ export default abstract class BaseController<T,I extends IModelAttributes.IBase>
 
     }
 
-    async findAll(options: IControllerMethods.IFindAllOptions) {
+    async findAll(options: IControllerMethods.IFindAllOptions): Promise<I[]> {
         try {
 
             const limit = options.limit;
             const offset = options.offset;
 
-            return this._model.findAll({where: {}, limit, offset});
+            const model = await this._model.findAll({where: {}, limit, offset});
+            return model.every()
         }
         catch (e) {
             console.log(e)
