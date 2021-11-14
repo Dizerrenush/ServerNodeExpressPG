@@ -7,8 +7,6 @@ export class BaseValidator {
             param('id')
                 .notEmpty()
                 .withMessage('The value should be not empty')
-                .isNumeric()
-                .withMessage('The value should be number')
         ];
     }
     checkRead() {

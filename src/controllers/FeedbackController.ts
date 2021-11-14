@@ -1,6 +1,6 @@
 import BaseController from "./BaseController";
-import {IControllerItem} from "./types/types";
+import type {ModelCtor} from "sequelize-typescript";
 
-export class FeedbackController extends BaseController<IControllerItem.IFeedback>{
+export class FeedbackController extends BaseController<ModelCtor> {
 
 }

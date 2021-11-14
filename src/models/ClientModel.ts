@@ -1,20 +1,22 @@
 import {DataTypes} from "sequelize";
 import type {Sequelize} from "sequelize";
+import type {IModel} from "@/models/types/types";
 
 export default (db: Sequelize) => {
-    return db.define('client', {
+    return db.define<IModel.IClient>('client', {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true
         },
-        description: {
+        fullname: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        clientId: {
-            type: DataTypes.INTEGER.UNSIGNED,
-            allowNull: false
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true
         }
-    })
+    });
 };

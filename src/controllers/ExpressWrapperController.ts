@@ -1,13 +1,13 @@
 
 import type BaseController from "./BaseController";
-import {Request, Response} from "express";
-import {IControllerItem} from "./types/types";
+import type {Request, Response} from "express";
+import {ModelCtor} from "sequelize-typescript";
 
-export default class ExpressWrapperController<T extends IControllerItem.IBase> {
+export default class ExpressWrapperController<T extends BaseController<ModelCtor>>{
 
-    private readonly _controller: BaseController<T>;
+    private readonly _controller: T;
 
-    constructor(controller: BaseController<T>) {
+    constructor(controller: T) {
         this._controller = controller;
     }
 

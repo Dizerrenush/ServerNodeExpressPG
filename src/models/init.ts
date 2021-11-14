@@ -1,7 +1,7 @@
 
 import db from '../database/connect';
-import Client_model from './client.model'
-import Feedback_model from './feedback.model';
+import Client_model from './ClientModel'
+import Feedback_model from './FeedbackModel';
 import {ClientController} from "../controllers/ClientController";
 import {ClientValidator} from "../validation/client";
 import {FeedbackController} from "../controllers/FeedbackController";
@@ -12,16 +12,16 @@ import feedbackRoute from '../routes/feedbackRoute'
 
 export default async function init () {
 
-    const Client = Client_model(db);
-    const Feedback = Feedback_model(db);
+    const clientModel = Client_model(db);
+    const feedbackModel = Feedback_model(db);
 
-    Client.hasMany(Feedback, {
+    clientModel.hasMany(feedbackModel, {
         sourceKey: 'id',
         foreignKey: 'clientId',
         as: 'feedbacks',
     });
 
-    Feedback.belongsTo(Client, {targetKey: 'id'});
+    feedbackModel.belongsTo(clientModel, {targetKey: 'id'});
 
     db.authenticate().then(() => {
         console.log('Database connected...');
@@ -31,11 +31,11 @@ export default async function init () {
 
     db.sync();
 
-    let client = new ClientController(Client);
+    let client = new ClientController(clientModel);
     client = new ExpressWrapperController(client);
     client = clientRoute(client,ClientValidator);
 
-    let feedback = new FeedbackController(Feedback);
+    let feedback = new FeedbackController(feedbackModel);
     feedback = new ExpressWrapperController(feedback);
     feedback = feedbackRoute(feedback,FeedbackValidator);
 

@@ -1,18 +1,15 @@
 
-export namespace IControllerItem {
+import {IModel,IModelAttributes} from "@/models/types/types";
 
-    export interface IBase {
-        id: number;
-    }
+export namespace IController{
 
-    export interface IClient extends IBase {
-        fullname: string;
-        email?: string;
-    }
+    export interface IBase<T extends IModel.TBase>{
 
-    export interface IFeedback extends IBase{
-        client_id: number;
-        description: string;
+        create<I extends IModelAttributes.IBase>(item: I): T|null
+        findAll()
+        findOne()
+        update(I)
+        delete()
     }
 
 }
