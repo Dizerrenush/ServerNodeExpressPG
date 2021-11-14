@@ -1,10 +1,9 @@
 
 import {IControllerMethods} from "@/controllers/types/types";
-import type {ModelCtor} from "sequelize-typescript";
 import {IModelAttributes} from "@/models/types/types";
-import {Model} from "sequelize-typescript";
+import {ModelCtor,Model} from "sequelize-typescript";
 
-export default abstract class BaseController<I extends IModelAttributes.IBase>{
+export default abstract class BaseController<I extends IModelAttributes.IBase> {
 
     private _model: ModelCtor<Model<I>>;
 
@@ -12,73 +11,76 @@ export default abstract class BaseController<I extends IModelAttributes.IBase>{
         this._model = model;
     }
 
-    async create(item: I): Promise<I | undefined> {
-
+    async create(item: I): Promise<I> {
         try {
             const model = await this._model.create(item);
-            return model.get({plain:true});
+            return model.get({plain: true});
+        } catch (e: any) {
+            return Promise.reject(new Error(e.toString()));
         }
-        catch (e) {
-            console.log(e)
-        }
-
     }
 
     async findAll(options: IControllerMethods.IFindAllOptions): Promise<I[]> {
+        const limit = options.limit;
+        const offset = options.offset;
         try {
+            const models = await this._model.findAll({
+                where: {},
+                limit,
+                offset
+            });
 
-            const limit = options.limit;
-            const offset = options.offset;
-
-            const model = await this._model.findAll({where: {}, limit, offset});
-            return model.every()
-        }
-        catch (e) {
-            console.log(e)
+            return models.map(el => el.get({plain: true}));
+        } catch (e: any) {
+            return Promise.reject(new Error(e.toString()));
         }
     }
 
-    async findOne(id: string) {
+    async findOne(id: string): Promise<I> {
         try {
-            return this._model.findOne({where: {id}});
+            const model = await this._model.findOne({raw: true, where: {id}});
 
+            if (model) {
+                return model.get({plain: true});
+            } else {
+                return Promise.reject(new Error('400'))
+            }
+        } catch (e: any) {
+            return Promise.reject(new Error(e.toString()));
         }
-        catch (e) {
-            console.log(e)
-        }
+
     }
 
-    async update(id: number, data: I) {
+    async update(id: number, data: I): Promise<I> {
         try {
 
             const model = await this._model.findOne({where: {id}});
 
             if (model) {
-                return model.update({...data});
+                await model.update({...data});
+                return model.get({plain: true});
+            } else {
+                return Promise.reject(new Error('400'))
             }
 
-            return false;
-
-        }
-        catch (e) {
-            console.log(e)
+        } catch (e: any) {
+            return Promise.reject(new Error(e.toString()));
         }
     }
 
-    async delete(id: number) {
+    async delete(id: number): Promise<void> {
         try {
 
             const model = await this._model.findOne({where: {id}});
 
             if (model) {
                 return await model.destroy();
+            } else {
+                return Promise.reject(new Error('400'))
             }
 
-            return false;
-
-        }
-        catch (e) {
-            console.log(e)
+        } catch (e: any) {
+            return Promise.reject(new Error(e.toString()));
         }
     }
 }
