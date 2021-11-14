@@ -13,6 +13,7 @@ import FeedbackValidator from "../validation/feedback";
 
 import clientRoute from '../routes/clientRoute';
 import feedbackRoute from '../routes/feedbackRoute';
+import {IModelAttributes} from "@/models/types/types";
 
 export default async function init () {
 
@@ -35,10 +36,13 @@ export default async function init () {
 
     db.sync();
 
-    const client = clientRoute(new ExpressWrapperController(new ClientController(clientModel)),ClientValidator);
+    const clientController = new ClientController(clientModel);
+    const expressClientController = new ExpressWrapperController<IModelAttributes.IClient>(clientController);
+    const client = clientRoute(expressClientController,ClientValidator);
 
-    const feedback = feedbackRoute(new ExpressWrapperController(new FeedbackController(feedbackModel)),FeedbackValidator);
-
+    const feedbackController = new FeedbackController(feedbackModel);
+    const expressFeedbackController = new ExpressWrapperController<IModelAttributes.IFeedback>(feedbackController);
+    const feedback = feedbackRoute(expressFeedbackController,FeedbackValidator);
     return [client,feedback]
 
 

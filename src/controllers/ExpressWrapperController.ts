@@ -27,8 +27,9 @@ export default class ExpressWrapperController<I extends IModelAttributes.IBase> 
         }
         catch (e) {
             return res.json({
-                msg: e,
-                controller: this._controller,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                msg: e.toString(),
                 status: 500,
                 route: "/list"
             });
