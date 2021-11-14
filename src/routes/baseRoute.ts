@@ -11,31 +11,31 @@ export function createRoute <I extends IModelAttributes.IBase,V extends BaseVali
     router.post(
         '/create',
         validator.checkCreate(),
-        controller.create
+        controller.create.bind(controller)
     );
 
     router.get(
         '/read',
         validator.checkRead(),
-        controller.findAll
+        controller.findAll.bind(controller)
     );
 
     router.get(
         '/read/:id',
         validator.checkIdParam(),
-        controller.find
+        controller.find.bind(controller)
     );
 
     router.put(
         '/update/:id',
         validator.checkIdParam(),
-        controller.update
+        controller.update.bind(controller)
     );
 
     router.delete(
         '/delete/:id',
         validator.checkIdParam(),
-        controller.delete
+        controller.delete.bind(controller)
     );
 
     return router;

@@ -7,7 +7,7 @@ export default (db: Sequelize) => {
     return db.define<Model<IModelAttributes.IClient>>('client', {
         id: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            autoIncrement: true,
             primaryKey: true
         },
         fullname: {
