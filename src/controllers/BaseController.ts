@@ -1,7 +1,7 @@
 
 import {IControllerMethods} from "@/controllers/types/types";
 import {IModelAttributes} from "@/models/types/types";
-import {ModelCtor,Model} from "sequelize-typescript";
+import {ModelCtor, Model} from "sequelize-typescript";
 
 export default abstract class BaseController<I extends IModelAttributes.IBase> {
 
@@ -15,8 +15,9 @@ export default abstract class BaseController<I extends IModelAttributes.IBase> {
         try {
             const model = await this._model.create(item);
             return model.get({plain: true});
-        } catch (e: any) {
-            return Promise.reject(new Error(e.toString()));
+        }
+        catch (e: any) {
+            throw new Error(e)
         }
     }
 
@@ -31,27 +32,30 @@ export default abstract class BaseController<I extends IModelAttributes.IBase> {
             });
 
             return models.map(el => el.get({plain: true}));
-        } catch (e: any) {
-            return Promise.reject(new Error(e.toString()));
+        }
+        catch (e: any) {
+            throw new Error(e)
         }
     }
 
-    async findOne(id: string): Promise<I> {
+    async findOne(id: string): Promise<I | string> {
         try {
             const model = await this._model.findOne({raw: true, where: {id}});
 
             if (model) {
                 return model.get({plain: true});
-            } else {
-                return Promise.reject(new Error('400'))
             }
-        } catch (e: any) {
-            return Promise.reject(new Error(e.toString()));
+
+            return 'Not Found 400'
+
+        }
+        catch (e: any) {
+            throw new Error(e)
         }
 
     }
 
-    async update(id: number, data: I): Promise<I> {
+    async update(id: number, data: I): Promise<I | string> {
         try {
 
             const model = await this._model.findOne({where: {id}});
@@ -59,28 +63,30 @@ export default abstract class BaseController<I extends IModelAttributes.IBase> {
             if (model) {
                 await model.update({...data});
                 return model.get({plain: true});
-            } else {
-                return Promise.reject(new Error('400'))
             }
 
-        } catch (e: any) {
-            return Promise.reject(new Error(e.toString()));
+            return 'Not Found 400'
+
+        }
+        catch (e: any) {
+            throw new Error(e)
         }
     }
 
-    async delete(id: number): Promise<void> {
+    async delete(id: number): Promise<void | string> {
         try {
 
             const model = await this._model.findOne({where: {id}});
 
             if (model) {
                 return await model.destroy();
-            } else {
-                return Promise.reject(new Error('400'))
             }
 
-        } catch (e: any) {
-            return Promise.reject(new Error(e.toString()));
+            return 'Not Found 400'
+
+        }
+        catch (e: any) {
+            throw new Error(e)
         }
     }
 }

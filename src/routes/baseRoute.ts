@@ -2,10 +2,9 @@
 import express from 'express';
 import type ExpressWrapperController from "../controllers/ExpressWrapperController";
 import type {BaseValidator} from '../validation/base';
-import BaseController from "@/controllers/BaseController";
-import {ModelCtor} from "sequelize-typescript";
+import {IModelAttributes} from "@/models/types/types";
 
-export function createRoute <C extends BaseController<ModelCtor>,V extends BaseValidator>(controller: ExpressWrapperController<C>, validator: V ){
+export function createRoute <I extends IModelAttributes.IBase,V extends BaseValidator>(controller: ExpressWrapperController<I>, validator: V ){
 
     const router = express.Router();
 

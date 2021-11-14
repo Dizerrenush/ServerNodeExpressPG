@@ -1,12 +1,13 @@
 
 import type BaseController from "./BaseController";
 import type {Request, Response} from "express";
+import {IModelAttributes} from "@/models/types/types";
 
-export default class ExpressWrapperController<T extends BaseController<any>>{
+export default class ExpressWrapperController<I extends IModelAttributes.IBase> {
 
-    private readonly _controller: T;
+    private readonly _controller: BaseController<I>;
 
-    constructor(controller: T) {
+    constructor(controller: BaseController<I>) {
         this._controller = controller;
     }
 
@@ -15,21 +16,20 @@ export default class ExpressWrapperController<T extends BaseController<any>>{
         const limit = (query.limit as number | undefined) || 10;
         const offset = query.offset as number | undefined;
         const options = {
-            limit:limit,
-            offset:offset,
+            limit: limit,
+            offset: offset,
         };
 
         try {
-            const models = await this._controller.findAll(options)
-            return res.json(models);
+            const models = this._controller.findAll(options);
+            models.then(data => {
+                return res.json(data)
+            })
         }
         catch (e) {
-
             return res.json({
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                msg: e.toString(),
-                controller:this._controller,
+                msg: e,
+                controller: this._controller,
                 status: 500,
                 route: "/list"
             });
@@ -38,10 +38,11 @@ export default class ExpressWrapperController<T extends BaseController<any>>{
 
     async create(req: Request, res: Response) {
         try {
-            const model = await this._controller.create({ ...req.body });
-            return res.json({ model, msg: "Successfully create model" });
+            const model = this._controller.create({...req.body});
+            model.then(data => {
+                return res.json({data, msg: "Successfully create model"})
+            });
         }
-
         catch (e) {
             return res.json({
                 msg: e,
@@ -54,13 +55,10 @@ export default class ExpressWrapperController<T extends BaseController<any>>{
     async find(req: Request, res: Response) {
         try {
             const {id} = req.params;
-            const model = await this._controller.findOne(id);
-
-            if (!model) {
-                return res.json({msg: "Can not find model"});
-            }
-
-            return res.json({model, msg: "model find"});
+            const model = this._controller.findOne(id);
+            model.then(data => {
+                return res.json({data})
+            })
         }
         catch (e) {
             return res.json({
@@ -72,16 +70,15 @@ export default class ExpressWrapperController<T extends BaseController<any>>{
     }
 
     async update(req: Request, res: Response) {
+
+        const {id} = req.params;
+
         try {
-            const {id} = req.params;
-            const model = await this._controller.findOne(id);
 
-            if (!model) {
-                return res.json({msg: "Can not find model"});
-            }
-
-            const updatedModel = await model.update({...req.body});
-            return res.json({updatedModel, msg: "model updated"});
+            const model = this._controller.findOne(id);
+            model.then(data => {
+                return res.json({data, msg: "model updated"})
+            })
 
         }
         catch (e) {
@@ -94,16 +91,15 @@ export default class ExpressWrapperController<T extends BaseController<any>>{
     }
 
     async delete(req: Request, res: Response) {
+
+        const {id} = req.params;
+
         try {
-            const {id} = req.params;
-            const model = await this._controller.findOne(id);
 
-            if (!model) {
-                return res.json({msg: "Can not find model"});
-            }
-
-            const deletedModel = await model.destroy();
-            return res.json({deletedModel, msg: "Model deleted"});
+            const model =  this._controller.findOne(id);
+            model.then(() => {
+                return res.json({ msg: "model deleted"})
+            })
 
         }
         catch (e) {

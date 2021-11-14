@@ -1,12 +1,11 @@
 
-
 import type ExpressWrapperController from "../controllers/ExpressWrapperController";
 import type {ClientValidator} from '../validation/client';
 import {createRoute} from "./baseRoute";
-import type {ClientController} from "@/controllers/ClientController";
+import {IModelAttributes} from "@/models/types/types";
 
-export default function createClientRoute(controller: ExpressWrapperController<ClientController>,validator: ClientValidator ) {
+export default function createClientRoute(controller: ExpressWrapperController<IModelAttributes.IClient>, validator: ClientValidator) {
 
-    return createRoute(controller,validator) ;
+    return createRoute(controller, validator);
 
 }
