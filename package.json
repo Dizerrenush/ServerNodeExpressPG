@@ -36,7 +36,6 @@
     "eslint": "^8.1.0",
     "nodemon": "^2.0.15",
     "path-browserify": "^1.0.1",
-    "sequelize-typescript": "^2.1.1",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "terser-webpack-plugin": "^5.2.4",

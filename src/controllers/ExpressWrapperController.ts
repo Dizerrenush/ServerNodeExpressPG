@@ -1,7 +1,7 @@
 
 import type BaseController from "./BaseController";
 import type {Request, Response} from "express";
-import {IModelAttributes} from "@/models/types/types";
+import {IModelAttributes} from "../models/types/types";
 
 export default class ExpressWrapperController<I extends IModelAttributes.IBase> {
 
@@ -21,8 +21,7 @@ export default class ExpressWrapperController<I extends IModelAttributes.IBase> 
         };
 
         try {
-            const models = this._controller.findAll(options);
-            models.then(data => {
+            this._controller.findAll(options).then(data => {
                 return res.json(data)
             })
         }
@@ -38,8 +37,7 @@ export default class ExpressWrapperController<I extends IModelAttributes.IBase> 
 
     async create(req: Request, res: Response) {
         try {
-            const model = this._controller.create({...req.body});
-            model.then(data => {
+            this._controller.create({...req.body}).then(data => {
                 return res.json({data, msg: "Successfully create model"})
             });
         }
@@ -55,8 +53,7 @@ export default class ExpressWrapperController<I extends IModelAttributes.IBase> 
     async find(req: Request, res: Response) {
         try {
             const {id} = req.params;
-            const model = this._controller.findOne(id);
-            model.then(data => {
+             this._controller.findOne(id).then(data => {
                 return res.json({data})
             })
         }
@@ -75,8 +72,7 @@ export default class ExpressWrapperController<I extends IModelAttributes.IBase> 
 
         try {
 
-            const model = this._controller.findOne(id);
-            model.then(data => {
+            this._controller.findOne(id).then(data => {
                 return res.json({data, msg: "model updated"})
             })
 
@@ -96,8 +92,7 @@ export default class ExpressWrapperController<I extends IModelAttributes.IBase> 
 
         try {
 
-            const model =  this._controller.findOne(id);
-            model.then(() => {
+            this._controller.findOne(id).then(() => {
                 return res.json({ msg: "model deleted"})
             })
 

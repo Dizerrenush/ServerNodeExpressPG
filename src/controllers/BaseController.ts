@@ -1,7 +1,7 @@
 
-import {IControllerMethods} from "@/controllers/types/types";
-import {IModelAttributes} from "@/models/types/types";
-import {ModelCtor, Model} from "sequelize-typescript";
+import {IControllerMethods} from "./types/types";
+import {IModelAttributes} from "../models/types/types";
+import {ModelCtor, Model} from "sequelize";
 
 export default abstract class BaseController<I extends IModelAttributes.IBase> {
 
