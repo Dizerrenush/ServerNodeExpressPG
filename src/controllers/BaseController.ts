@@ -2,20 +2,20 @@
 import {IControllerMethods} from "@/controllers/types/types";
 import type {ModelCtor} from "sequelize-typescript";
 import {IModelAttributes} from "@/models/types/types";
+import {Model} from "sequelize-typescript";
 
+export default abstract class BaseController<T,I extends IModelAttributes.IBase>{
 
-export default abstract class BaseController<T extends ModelCtor>{
-
-    private _model: T;
+    private _model: ModelCtor<Model<I>>;
 
     constructor(model: T) {
         this._model = model;
     }
 
-    async create<I extends IModelAttributes.IBase>(item:I): {
+    async create(item:I) {
 
         try {
-            return JSON.stringify(this._model.create(item));
+            return this._model.create(item);
         }
         catch (e) {
             console.log(e)
@@ -46,7 +46,7 @@ export default abstract class BaseController<T extends ModelCtor>{
         }
     }
 
-    async update<I extends IModelAttributes.IBase>(id: number, data: I) {
+    async update(id: number, data: I) {
         try {
 
             const model = await this._model.findOne({where: {id}});
