@@ -31,7 +31,10 @@ const config = {
       "crypto": false,
       "stream": false,
       "zlib": false,
-      "url": false
+      "url": false,
+      "querystring":false,
+      "utf-8-validate":false,
+      "bufferutil":false
     },
     extensions: [".scss", ".ts", ".tsx", ".js", ".jsx", ".json"],
   },

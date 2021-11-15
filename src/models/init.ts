@@ -13,7 +13,9 @@ import FeedbackValidator from "../validation/feedback";
 
 import clientRoute from '../routes/clientRoute';
 import feedbackRoute from '../routes/feedbackRoute';
-import {IModelAttributes} from "@/models/types/types";
+import {IModelAttributes} from "./types/types";
+import WebSocket from 'ws';
+import {WebSocketController} from "../controllers/WebSocketController";
 
 export default async function init () {
 
@@ -36,12 +38,16 @@ export default async function init () {
 
     db.sync();
 
+    const wsServer: string = process.env.WEBSOCKET_SERVER || 'ws://localhost:3000';
+    const wsConnection = new WebSocket(wsServer);
+    const webSocketController = new WebSocketController(wsConnection);
+
     const clientController = new ClientController(clientModel);
-    const expressClientController = new ExpressWrapperController<IModelAttributes.IClient>(clientController);
+    const expressClientController = new ExpressWrapperController<IModelAttributes.IClient>(clientController,webSocketController);
     const client = clientRoute(expressClientController,ClientValidator);
 
     const feedbackController = new FeedbackController(feedbackModel);
-    const expressFeedbackController = new ExpressWrapperController<IModelAttributes.IFeedback>(feedbackController);
+    const expressFeedbackController = new ExpressWrapperController<IModelAttributes.IFeedback>(feedbackController,webSocketController);
     const feedback = feedbackRoute(expressFeedbackController,FeedbackValidator);
     return [client,feedback]
 

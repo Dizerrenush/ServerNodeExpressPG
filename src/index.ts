@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 8080;
 const corsOptions = {
     origin: process.env.CORS_ORIGIN
 };
-const version = process.env.API_VERSION || 'v1';
+const version = process.env.API_VERSION || '1';
 const baseRoute ='/api/v' + version;
 const dataSize = '50mb';
 

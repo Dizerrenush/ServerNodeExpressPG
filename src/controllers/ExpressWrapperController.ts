@@ -2,13 +2,17 @@
 import type BaseController from "./BaseController";
 import type {Request, Response} from "express";
 import {IModelAttributes} from "../models/types/types";
+import type {WebSocketController} from "@/controllers/WebSocketController";
+import {WS_CREATE_EVENTS} from "./types/const";
 
 export default class ExpressWrapperController<I extends IModelAttributes.IBase> {
 
     private readonly _controller: BaseController<I>;
+    private readonly _wsController: WebSocketController;
 
-    constructor(controller: BaseController<I>) {
+    constructor(controller: BaseController<I>,wsConnection: WebSocketController) {
         this._controller = controller;
+        this._wsController = wsConnection;
     }
 
     async findAll(req: Request, res: Response) {
@@ -39,6 +43,11 @@ export default class ExpressWrapperController<I extends IModelAttributes.IBase> 
     async create(req: Request, res: Response) {
         try {
             this._controller.create({...req.body}).then(data => {
+                const event = this._controller.createEvent(WS_CREATE_EVENTS.CREATED)
+                this._wsController.send({
+                    event: event,
+                    payload: {id: data.id }
+                })
                 return res.json({data, msg: "Successfully create model"})
             });
         }

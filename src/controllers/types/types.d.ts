@@ -22,3 +22,18 @@ export namespace IControllerMethods {
     }
 
 }
+
+export namespace IWebSocketController{
+
+    export interface IData{
+
+        event:number
+        payload:IPayload
+    }
+
+    export interface IPayload {
+
+        id:number
+
+    }
+}

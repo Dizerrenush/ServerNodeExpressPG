@@ -2,7 +2,7 @@
 export namespace IModelAttributes {
 
     export interface IBase {
-        id?: number;
+        id: number;
     }
 
     export interface IClient extends IBase{

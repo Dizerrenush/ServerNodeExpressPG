@@ -1,0 +1,17 @@
+
+export const enum WS_CREATE_EVENTS{
+    NONE,
+    CREATED,
+    UPDATED,
+    DELETED,
+}
+
+export const enum WS_EVENTS{
+    NONE,
+    CLIENT_CREATED,
+    CLIENT_UPDATED,
+    CLIENT_DELETED,
+    FEEDBACK_CREATED,
+    FEEDBACK_UPDATED,
+    FEEDBACK_DELETED,
+}

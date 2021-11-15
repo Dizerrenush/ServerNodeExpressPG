@@ -2,6 +2,7 @@
 import {IControllerMethods} from "./types/types";
 import {IModelAttributes} from "../models/types/types";
 import {ModelCtor, Model} from "sequelize";
+import {WS_CREATE_EVENTS} from "./types/const";
 
 export default abstract class BaseController<I extends IModelAttributes.IBase> {
 
@@ -87,6 +88,20 @@ export default abstract class BaseController<I extends IModelAttributes.IBase> {
         }
         catch (e: any) {
             throw new Error(e)
+        }
+    }
+
+    createEvent(event: number): number {
+
+        switch (event) {
+            case WS_CREATE_EVENTS.CREATED:
+                return WS_CREATE_EVENTS.CREATED;
+            case WS_CREATE_EVENTS.UPDATED:
+                return WS_CREATE_EVENTS.UPDATED;
+            case WS_CREATE_EVENTS.DELETED:
+                return WS_CREATE_EVENTS.DELETED;
+            default: return WS_CREATE_EVENTS.NONE
+
         }
     }
 }
