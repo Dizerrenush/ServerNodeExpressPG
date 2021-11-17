@@ -13,7 +13,9 @@ import FeedbackValidator from "../validation/feedback";
 
 import clientRoute from '../routes/clientRoute';
 import feedbackRoute from '../routes/feedbackRoute';
+
 import {IModelAttributes} from "./types/types";
+
 import WebSocket from 'ws';
 import {WebSocketController} from "../controllers/WebSocketController";
 
@@ -36,7 +38,7 @@ export default async function init () {
         console.log('Error: ' + err);
     })
 
-    db.sync();
+    await db.sync();
 
     const wsServer: string = process.env.WEBSOCKET_SERVER || 'ws://localhost:3000';
     const wsConnection = new WebSocket(wsServer);

@@ -5,12 +5,12 @@ export namespace IModelAttributes {
         id: number;
     }
 
-    export interface IClient extends IBase{
+    export interface IClient extends IBase {
         fullname: string;
         email: string;
     }
 
-    export interface IFeedback extends IBase{
+    export interface IFeedback extends IBase {
         description: string;
         clientId: number;
     }

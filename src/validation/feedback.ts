@@ -6,12 +6,12 @@ export class FeedbackValidator extends BaseValidator{
 
     checkCreate() {
         return [
-            body('fullname')
+            body('description')
                 .notEmpty()
-                .withMessage('The fullname value should not be empty'),
-            body('email')
+                .withMessage('The description value should not be empty'),
+            body('clientId')
                 .notEmpty()
-                .withMessage('The email value should not be empty'),
+                .withMessage('The clientId value should not be empty'),
         ];
     }
 

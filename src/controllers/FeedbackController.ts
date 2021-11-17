@@ -2,6 +2,7 @@
     import BaseController from "./BaseController";
 import {IModelAttributes} from "../models/types/types";
 import {WS_CREATE_EVENTS, WS_EVENTS} from "./types/const";
+    import { create } from "domain";
 
 export class FeedbackController extends BaseController<IModelAttributes.IFeedback> {
 
@@ -18,4 +19,15 @@ export class FeedbackController extends BaseController<IModelAttributes.IFeedbac
 
         }
     }
+
+    async create(item: IModelAttributes.IFeedback): Promise<IModelAttributes.IFeedback> {
+        try {
+            const model = await this._model.create(item);
+            return model.get({plain: true});
+        }
+        catch (e: any) {
+            throw new Error(e)
+        }
+    }
+
 }
