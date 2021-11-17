@@ -1,8 +1,7 @@
-
-    import BaseController from "./BaseController";
-import {IModelAttributes} from "../models/types/types";
+import BaseController from "./BaseController";
+import {IFullAttributes, IModelAttributes} from "../models/types/types";
 import {WS_CREATE_EVENTS, WS_EVENTS} from "./types/const";
-    import { create } from "domain";
+import {IControllerMethods} from "@/controllers/types/types";
 
 export class FeedbackController extends BaseController<IModelAttributes.IFeedback> {
 
@@ -20,10 +19,20 @@ export class FeedbackController extends BaseController<IModelAttributes.IFeedbac
         }
     }
 
-    async create(item: IModelAttributes.IFeedback): Promise<IModelAttributes.IFeedback> {
+    async create(item: IModelAttributes.IFeedback): Promise<IFullAttributes.IClientFeedback> {
         try {
-            const model = await this._model.create(item);
-            return model.get({plain: true});
+            return super.create(item);
+        }
+        catch (e: any) {
+            throw new Error(e)
+        }
+    }
+
+    async findAll(options: IControllerMethods.IFindAllOptions): Promise<IFullAttributes.IClientFeedback[]> {
+
+        options.include = [{model: 'creator'}]
+        try {
+            return super.findAll(options);
         }
         catch (e: any) {
             throw new Error(e)

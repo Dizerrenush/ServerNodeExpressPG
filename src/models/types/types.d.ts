@@ -16,3 +16,12 @@ export namespace IModelAttributes {
     }
 
 }
+
+export namespace IFullAttributes{
+
+    export interface IClientFeedback extends IModelAttributes.IFeedback, IModelAttributes.IFeedback{
+
+
+    }
+
+}

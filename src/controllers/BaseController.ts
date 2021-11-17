@@ -6,7 +6,7 @@ import {WS_CREATE_EVENTS} from "./types/const";
 
 export default abstract class BaseController<I extends IModelAttributes.IBase> {
 
-    private _model: ModelCtor<Model<I>>;
+    protected _model: ModelCtor<Model<I>>;
 
     constructor(model: ModelCtor<Model<I>>) {
         this._model = model;

@@ -30,7 +30,7 @@ export default async function init () {
         as: 'feedbacks',
     });
 
-    feedbackModel.belongsTo(clientModel, {targetKey: 'id'});
+    feedbackModel.belongsTo(clientModel, {as: 'creator', targetKey: 'id'});
 
     db.authenticate().then(() => {
         console.log('Database connected...');
