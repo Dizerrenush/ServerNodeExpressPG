@@ -1,4 +1,3 @@
-
 import type BaseController from "./BaseController";
 import type {Request, Response} from "express";
 import {IModelAttributes} from "../models/types/types";
@@ -10,7 +9,7 @@ export default class ExpressWrapperController<I extends IModelAttributes.IBase> 
     private readonly _controller: BaseController<I>;
     private readonly _wsController: WebSocketController;
 
-    constructor(controller: BaseController<I>,wsConnection: WebSocketController) {
+    constructor(controller: BaseController<I>, wsConnection: WebSocketController) {
         this._controller = controller;
         this._wsController = wsConnection;
     }
@@ -19,17 +18,22 @@ export default class ExpressWrapperController<I extends IModelAttributes.IBase> 
         const query = req.query;
         const limit = (query.limit as number | undefined) || 10;
         const offset = query.offset as number | undefined;
-        const options = {
-            limit: limit,
-            offset: offset,
-        };
-
+        let options = {};
+        if (limit !== 0) {
+            options = {
+                offset: offset,
+            }
+        } else {
+            options = {
+                limit: limit,
+                offset: offset,
+            }
+        }
         try {
             this._controller.findAll(options).then(data => {
                 return res.json(data)
             })
-        }
-        catch (e) {
+        } catch (e) {
             return res.json({
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
@@ -46,12 +50,11 @@ export default class ExpressWrapperController<I extends IModelAttributes.IBase> 
                 const event = this._controller.createEvent(WS_CREATE_EVENTS.CREATED)
                 this._wsController.send({
                     event: event,
-                    payload: {id: data.id }
+                    payload: data
                 })
-                return res.json({data, msg: "Successfully create model"})
+                return res.json(data)
             });
-        }
-        catch (e) {
+        } catch (e) {
             return res.json({
                 msg: e,
                 status: 500,
@@ -63,11 +66,10 @@ export default class ExpressWrapperController<I extends IModelAttributes.IBase> 
     async find(req: Request, res: Response) {
         try {
             const {id} = req.params;
-             this._controller.findOne(id).then(data => {
+            this._controller.findOne(id).then(data => {
                 return res.json({data})
             })
-        }
-        catch (e) {
+        } catch (e) {
             return res.json({
                 msg: e,
                 status: 500,
@@ -86,8 +88,7 @@ export default class ExpressWrapperController<I extends IModelAttributes.IBase> 
                 return res.json({data, msg: "model updated"})
             })
 
-        }
-        catch (e) {
+        } catch (e) {
             return res.json({
                 msg: e,
                 status: 500,
@@ -103,11 +104,10 @@ export default class ExpressWrapperController<I extends IModelAttributes.IBase> 
         try {
 
             this._controller.findOne(id).then(() => {
-                return res.json({ msg: "model deleted"})
+                return res.json({msg: "model deleted"})
             })
 
-        }
-        catch (e) {
+        } catch (e) {
             return res.json({
                 msg: e,
                 status: 500,

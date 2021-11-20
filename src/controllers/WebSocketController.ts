@@ -10,7 +10,7 @@ export class WebSocketController  {
         this._wsConnection = connection;
     }
 
-    send(data: IWebSocketController.IData){
+    send(data: any){
         this._wsConnection.send(JSON.stringify(data));
     }
 

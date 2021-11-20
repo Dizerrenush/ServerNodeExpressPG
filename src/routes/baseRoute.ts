@@ -1,5 +1,6 @@
 
 import express from 'express';
+import {validationResult } from 'express-validator';
 import type ExpressWrapperController from "../controllers/ExpressWrapperController";
 import type {BaseValidator} from '../validation/base';
 import {IModelAttributes} from "@/models/types/types";
@@ -11,17 +12,23 @@ export function createRoute <I extends IModelAttributes.IBase,V extends BaseVali
     router.post(
         '/create',
         validator.checkCreate(),
-        controller.create.bind(controller)
+        (req: express.Request, res: express.Response) => {
+            // Finds the validation errors in this request and wraps them in an object with handy functions
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({errors: errors.array()});
+            }
+            controller.create.bind(controller)
+        }
     );
 
     router.get(
-        '/read',
-        validator.checkRead(),
+        '/get',
         controller.findAll.bind(controller)
     );
 
     router.get(
-        '/read/:id',
+        '/get/:id',
         validator.checkIdParam(),
         controller.find.bind(controller)
     );

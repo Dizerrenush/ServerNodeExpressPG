@@ -9,20 +9,6 @@ export class BaseValidator {
                 .withMessage('The value should be not empty')
         ];
     }
-    checkRead() {
-        return [
-            query('limit')
-                .optional()
-                .isNumeric()
-                .withMessage('The value should be number')
-                .isInt({ min: 1, max: 10 })
-                .withMessage('The limit value should be number and between 1-10'),
-            query('offset')
-                .optional()
-                .isNumeric()
-                .withMessage('The value should be number'),
-        ];
-    }
     checkIdParam() {
         return [
             param('id')

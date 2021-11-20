@@ -26,7 +26,7 @@ export default async function init () {
 
     clientModel.hasMany(feedbackModel, {
         sourceKey: 'id',
-        foreignKey: 'clientId',
+        foreignKey: 'creatorId',
         as: 'feedbacks',
     });
 

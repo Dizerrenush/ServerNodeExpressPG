@@ -1,5 +1,5 @@
 
-import {IControllerMethods} from "./types/types";
+import {IBaseControllerMethods, IControllerMethods} from "./types/types";
 import {IModelAttributes} from "../models/types/types";
 import {ModelCtor, Model} from "sequelize";
 import {WS_CREATE_EVENTS} from "./types/const";
@@ -12,9 +12,9 @@ export default abstract class BaseController<I extends IModelAttributes.IBase> {
         this._model = model;
     }
 
-    async create(item: I): Promise<I> {
+    async create(item: I,options: IBaseControllerMethods.ICreateOptions = {}): Promise<I> {
         try {
-            const model = await this._model.create(item);
+            const model = await this._model.create(item,options);
             return model.get({plain: true});
         }
         catch (e: any) {
@@ -25,11 +25,13 @@ export default abstract class BaseController<I extends IModelAttributes.IBase> {
     async findAll(options: IControllerMethods.IFindAllOptions): Promise<I[]> {
         const limit = options.limit;
         const offset = options.offset;
+        const include = options.include;
         try {
             const models = await this._model.findAll({
                 where: {},
                 limit,
-                offset
+                offset,
+                include
             });
 
             return models.map(el => el.get({plain: true}));

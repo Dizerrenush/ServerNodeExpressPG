@@ -6,13 +6,17 @@ export namespace IModelAttributes {
     }
 
     export interface IClient extends IBase {
-        fullname: string;
+        fullname?: string;
         email: string;
     }
 
     export interface IFeedback extends IBase {
         description: string;
-        clientId: number;
+        creatorId?: number;
+    }
+
+    export interface IFeedbackClient extends IFeedback {
+        client?: IClient
     }
 
 }

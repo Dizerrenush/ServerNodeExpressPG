@@ -19,8 +19,9 @@ export class FeedbackController extends BaseController<IModelAttributes.IFeedbac
         }
     }
 
-    async create(item: IModelAttributes.IFeedback): Promise<IFullAttributes.IClientFeedback> {
+    async create(item: IModelAttributes.IFeedbackClient): Promise<IFullAttributes.IClientFeedback> {
         try {
+            //TODO with client
             return super.create(item);
         }
         catch (e: any) {
@@ -30,8 +31,9 @@ export class FeedbackController extends BaseController<IModelAttributes.IFeedbac
 
     async findAll(options: IControllerMethods.IFindAllOptions): Promise<IFullAttributes.IClientFeedback[]> {
 
-        options.include = [{model: 'creator'}]
+        options.include = 'creator';
         try {
+            console.log(options)
             return super.findAll(options);
         }
         catch (e: any) {

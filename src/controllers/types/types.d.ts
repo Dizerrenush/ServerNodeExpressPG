@@ -4,29 +4,21 @@ export namespace IControllerMethods {
     export interface IFindAllOptions {
         limit?: number;
         offset?: number;
-        include?: Array<IIncludeOptions>
+        include?: string
     }
-
-    interface IIncludeOptions {
-
-        model: string;
-        required?: boolean;
-    }
-
 
 }
-
+export namespace IBaseControllerMethods {
+    export interface ICreateOptions {
+        include?: string
+    }
+}
 export namespace IWebSocketController {
 
     export interface IData {
 
-        event: number
-        payload: IPayload
+        type: number
+        payload: any
     }
 
-    export interface IPayload {
-
-        id: number
-
-    }
 }

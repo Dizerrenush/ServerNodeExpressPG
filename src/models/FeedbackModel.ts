@@ -14,7 +14,7 @@ export default (db: Sequelize)  => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        clientId: {
+        creatorId: {
             type: DataTypes.INTEGER,
             allowNull: false
         }
