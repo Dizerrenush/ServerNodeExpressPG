@@ -1,7 +1,7 @@
 
 import type WebSocket from "ws";
 
-export class WebSocketController  {
+export class WebSocketController {
 
     private readonly _wsConnection: WebSocket;
 
@@ -9,7 +9,7 @@ export class WebSocketController  {
         this._wsConnection = connection;
     }
 
-    send(data: any){
+    send<T>(data: T) {
         this._wsConnection.send(JSON.stringify(data));
     }
 

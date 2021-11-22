@@ -2,10 +2,9 @@
 import type BaseController from "./BaseController";
 import type {Request, Response} from "express";
 import {IModelAttributes} from "../models/types/types";
-import type {WebSocketController} from "@/controllers/WebSocketController";
+import type {WebSocketController} from "./WebSocketController";
 import {WS_BASE_EVENT_ID} from "./types/const";
-
-const modelNotFount = 'Can not find model';
+import {IWebSocketController} from "./types/types";
 
 export default class ExpressWrapperController<I extends IModelAttributes.IBase> {
 
@@ -17,103 +16,52 @@ export default class ExpressWrapperController<I extends IModelAttributes.IBase> 
         this._wsController = wsConnection;
     }
 
-    async findAll(req: Request, res: Response) {
+    async findAll(req: Request, res: Response): Promise<void> {
         const query = req.query;
         const limit = query.limit as number | undefined;
         const offset = query.offset as number | undefined;
         const where = {};
-        const options={
+        const options = {
             limit,
             offset,
             where,
         };
+        const data = await this._controller.findAll(options);
 
-
-        this._controller.findAll(options).then(data => {
-            if (data) {
-                return res.json(data)
-            }
-
-            return res.json({
-                msg: 'Records not found',
-                status: 404,
-                route: "/list"
-            });
-        })
-
+        res.json(data);
     }
 
-    async create(req: Request, res: Response) {
-        try {
-            this._controller.create({...req.body}).then(data => {
-                const event = this._controller.getEventId(WS_BASE_EVENT_ID.CREATED);
+    async create(req: Request, res: Response): Promise<void> {
+        const payload = await this._controller.create({...req.body});
+        const eventId = this._controller.getEventId(WS_BASE_EVENT_ID.CREATED);
 
-                this._wsController.send({
-                    event: event,
-                    payload: data,
-                });
+        this._wsController.send<IWebSocketController.Send<I>>({
+            eventId,
+            payload,
+        });
 
-                return res.json(data);
-            });
-        } catch (e) {
-            return res.json({
-                msg: e,
-                status: 500,
-                route: "/create"
-            });
-        }
+        res.json(payload);
     }
 
-    async find(req: Request, res: Response) {
-            const {id} = req.params;
-            this._controller.findOne({where: {id}}).then(data => {
-                if(data){
-                    return res.json({data})
-                }
-                return res.json({
-                    msg: modelNotFount,
-                    status: 500,
-                    route: "/find/:id",
-                });
-            })
-    }
-
-    async update(req: Request, res: Response) {
-
+    async find(req: Request, res: Response): Promise<void> {
         const {id} = req.params;
+        const data = await this._controller.findOne({where: {id}});
 
-        try {
-
-            this._controller.findOne({where: {id}}).then(data => {
-                return res.json({data})
-            })
-
-        } catch (e) {
-            return res.json({
-                msg: e,
-                status: 500,
-                route: "/update/:id",
-            });
-        }
+        res.json(data);
     }
 
-    async delete(req: Request, res: Response) {
-
+    async update(req: Request, res: Response): Promise<I | void> {
         const {id} = req.params;
+        const data = await this._controller.findOne({where: {id}});
 
-        try {
+        res.json(data);
+    }
 
-            this._controller.findOne({where: {id}}).then(() => {
-                return res.json({msg: "model deleted"})
-            })
+    async delete(req: Request, res: Response): Promise<void> {
+        const {id} = req.params;
+        const data = await this._controller.delete({where: {id}});
 
-        } catch (e) {
-            return res.json({
-                msg: e,
-                status: 500,
-                route: "/delete/:id",
-            });
-        }
+        res.json(data);
     }
 
 }

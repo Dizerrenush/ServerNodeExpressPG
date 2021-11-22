@@ -1,25 +1,19 @@
 
-import db from '../database/connect';
-
-import Client_model from './ClientModel'
-import Feedback_model from './FeedbackModel';
-
+import db from "../database/connect";
+import Client_model from "./ClientModel"
+import Feedback_model from "./FeedbackModel";
 import {ClientController} from "../controllers/ClientController";
 import {FeedbackController} from "../controllers/FeedbackController";
 import ExpressWrapperController from "../controllers/ExpressWrapperController";
-
 import ClientValidator from "../validation/client";
 import FeedbackValidator from "../validation/feedback";
-
-import clientRoute from '../routes/clientRoute';
-import feedbackRoute from '../routes/feedbackRoute';
-
+import clientRoute from "../routes/clientRoute";
+import feedbackRoute from "../routes/feedbackRoute";
 import {IModelAttributes} from "./types/types";
-
-import WebSocket from 'ws';
+import WebSocket from "ws";
 import {WebSocketController} from "../controllers/WebSocketController";
 
-export default async function init () {
+export default async function init() {
 
     const clientModel = Client_model(db);
     const feedbackModel = Feedback_model(db);
@@ -45,13 +39,13 @@ export default async function init () {
     const webSocketController = new WebSocketController(wsConnection);
 
     const clientController = new ClientController(clientModel);
-    const expressClientController = new ExpressWrapperController<IModelAttributes.IClient>(clientController,webSocketController);
-    const client = clientRoute(expressClientController,ClientValidator);
+    const expressClientController = new ExpressWrapperController<IModelAttributes.IClient>(clientController, webSocketController);
+    const client = clientRoute(expressClientController, ClientValidator);
 
-    const feedbackController = new FeedbackController(feedbackModel,clientController);
-    const expressFeedbackController = new ExpressWrapperController<IModelAttributes.IFeedback>(feedbackController,webSocketController);
-    const feedback = feedbackRoute(expressFeedbackController,FeedbackValidator);
-    return [client,feedback]
+    const feedbackController = new FeedbackController(feedbackModel, clientController);
+    const expressFeedbackController = new ExpressWrapperController<IModelAttributes.IFeedback>(feedbackController, webSocketController);
+    const feedback = feedbackRoute(expressFeedbackController, FeedbackValidator);
+    return [client, feedback]
 
 
 }

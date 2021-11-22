@@ -1,6 +1,7 @@
+
 import BaseController from "./BaseController";
 import {IModelAttributes} from "../models/types/types";
-import {WS_BASE_EVENT_ID,WS_EVENT_ID } from "./types/const";
+import {WS_BASE_EVENT_ID, WS_EVENT_ID} from "./types/const";
 
 export class ClientController extends BaseController<IModelAttributes.IClient> {
 
@@ -13,7 +14,8 @@ export class ClientController extends BaseController<IModelAttributes.IClient> {
                 return WS_EVENT_ID.CLIENT_UPDATED;
             case WS_BASE_EVENT_ID.DELETED:
                 return WS_EVENT_ID.CLIENT_DELETED;
-            default: return WS_EVENT_ID.NONE
+            default:
+                return WS_EVENT_ID.NONE
 
         }
     }

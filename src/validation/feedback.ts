@@ -1,8 +1,8 @@
 
-import { body } from 'express-validator';
-import { BaseValidator } from './base'
+import {body} from "express-validator";
+import {BaseValidator} from "./base";
 
-export class FeedbackValidator extends BaseValidator{
+export class FeedbackValidator extends BaseValidator {
 
     checkCreate() {
         return [

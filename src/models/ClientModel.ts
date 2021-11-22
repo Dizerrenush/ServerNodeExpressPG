@@ -1,7 +1,7 @@
-
 import {DataTypes} from "sequelize";
-import type {Sequelize,Model} from "sequelize";
-import type {IModelAttributes} from "../models/types/types";
+
+import type {Sequelize, Model} from "sequelize";
+import type {IModelAttributes} from "./types/types";
 
 export default (db: Sequelize) => {
     return db.define<Model<IModelAttributes.IClient>>('client', {

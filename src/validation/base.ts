@@ -1,5 +1,5 @@
 
-import { param, query} from 'express-validator';
+import {param} from "express-validator";
 
 export class BaseValidator {
     checkCreate() {
@@ -9,6 +9,7 @@ export class BaseValidator {
                 .withMessage('The value should be not empty')
         ];
     }
+
     checkIdParam() {
         return [
             param('id')

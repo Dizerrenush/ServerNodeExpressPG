@@ -1,11 +1,10 @@
 
-import express from 'express';
-import {validationResult } from 'express-validator';
+import express from "express";
 import type ExpressWrapperController from "../controllers/ExpressWrapperController";
-import type {BaseValidator} from '../validation/base';
-import {IModelAttributes} from "@/models/types/types";
+import type {BaseValidator} from "../validation/base";
+import {IModelAttributes} from "../models/types/types";
 
-export function createRoute <I extends IModelAttributes.IBase,V extends BaseValidator>(controller: ExpressWrapperController<I>, validator: V ){
+export function createRoute<I extends IModelAttributes.IBase, V extends BaseValidator>(controller: ExpressWrapperController<I>, validator: V) {
 
     const router = express.Router();
 
@@ -13,7 +12,6 @@ export function createRoute <I extends IModelAttributes.IBase,V extends BaseVali
         '/create',
         validator.checkCreate(),
         controller.create.bind(controller)
-
     );
 
     router.get(

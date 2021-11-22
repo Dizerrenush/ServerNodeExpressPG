@@ -1,7 +1,8 @@
 
 import {IModelAttributes} from "../models/types/types";
-import {ModelCtor, Model, FindOptions, CreateOptions, NonNullFindOptions, UpdateOptions} from "sequelize";
+import {ModelCtor, Model, FindOptions, CreateOptions} from "sequelize";
 import {WS_BASE_EVENT_ID} from "./types/const";
+import {IExpressWrapperController} from "./types/types";
 
 export default abstract class BaseController<I extends IModelAttributes.IBase> {
 
@@ -12,16 +13,13 @@ export default abstract class BaseController<I extends IModelAttributes.IBase> {
     }
 
     async create(item: I, options?: CreateOptions<I>): Promise<I> {
-        try {
-            const model = await this._model.create(item, options);
+        const model = await this._model.create(item, options);
 
-            return model.get({plain: true});
-        } catch (e: any) {
-            throw new Error(e)
-        }
+        return model.get({plain: true});
+
     }
 
-    async findAll(options: FindOptions<I>): Promise<I[] | void> {
+    async findAll(options: FindOptions<I>): Promise<I[] | []> {
         const models = await this._model.findAll(options);
 
         return models.map(el => el.get({plain: true}));
@@ -37,7 +35,7 @@ export default abstract class BaseController<I extends IModelAttributes.IBase> {
         return void 0;
     }
 
-    async update(item: Partial<I>,options: FindOptions<I>): Promise<I | void> {
+    async update(item: Partial<I>, options: FindOptions<I>): Promise<I | void> {
         const model = await this._model.findOne(options);
 
         if (model) {
@@ -48,14 +46,15 @@ export default abstract class BaseController<I extends IModelAttributes.IBase> {
         return void 0;
     }
 
-    async delete(options: NonNullFindOptions<I>): Promise<void | string> {
+    async delete(options: FindOptions<I>): Promise<IExpressWrapperController.Delete> {
         const model = await this._model.findOne(options);
 
         if (model) {
-            return await model.destroy();
+            await model.destroy();
+            return {success: true};
         }
-        //TODO error
-        return void 0;
+
+        return {success: false};
     }
 
     getEventId(eventId: WS_BASE_EVENT_ID): WS_BASE_EVENT_ID {
