@@ -2,7 +2,7 @@
 export namespace IModelAttributes {
 
     export interface IBase {
-        id: number;
+        id?: number;
     }
 
     export interface IClient extends IBase {
@@ -10,22 +10,9 @@ export namespace IModelAttributes {
         email: string;
     }
 
-    export interface IFeedback extends IBase {
+    export interface IFeedback extends Partial<IClient> {
         description: string;
         creatorId?: number;
-    }
-
-    export interface IFeedbackClient extends IFeedback {
-        client?: IClient
-    }
-
-}
-
-export namespace IFullAttributes{
-
-    export interface IClientFeedback extends IModelAttributes.IFeedback, IModelAttributes.IFeedback{
-
-
     }
 
 }

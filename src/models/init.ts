@@ -48,7 +48,7 @@ export default async function init () {
     const expressClientController = new ExpressWrapperController<IModelAttributes.IClient>(clientController,webSocketController);
     const client = clientRoute(expressClientController,ClientValidator);
 
-    const feedbackController = new FeedbackController(feedbackModel);
+    const feedbackController = new FeedbackController(feedbackModel,clientController);
     const expressFeedbackController = new ExpressWrapperController<IModelAttributes.IFeedback>(feedbackController,webSocketController);
     const feedback = feedbackRoute(expressFeedbackController,FeedbackValidator);
     return [client,feedback]

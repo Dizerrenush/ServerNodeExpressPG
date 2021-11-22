@@ -12,7 +12,6 @@ export default (db: Sequelize) => {
         },
         fullname: {
             type: DataTypes.STRING,
-            allowNull: true
         },
         email: {
             type: DataTypes.STRING,

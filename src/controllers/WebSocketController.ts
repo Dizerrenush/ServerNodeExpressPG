@@ -1,5 +1,4 @@
 
-import type {IWebSocketController} from "./types/types";
 import type WebSocket from "ws";
 
 export class WebSocketController  {

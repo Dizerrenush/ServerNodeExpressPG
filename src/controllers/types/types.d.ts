@@ -1,24 +1,11 @@
+import type 
+    IModelAttributes} from "@/models/types/types";
 
-export namespace IControllerMethods {
+export namespace IFeedbackController{
 
-    export interface IFindAllOptions {
-        limit?: number;
-        offset?: number;
-        include?: string
+    export interface IFeedbackFindAll extends IModelAttributes.IFeedback{
+
+        creator: Partial<IModelAttributes.IClient>
+
     }
-
-}
-export namespace IBaseControllerMethods {
-    export interface ICreateOptions {
-        include?: string
-    }
-}
-export namespace IWebSocketController {
-
-    export interface IData {
-
-        type: number
-        payload: any
-    }
-
 }

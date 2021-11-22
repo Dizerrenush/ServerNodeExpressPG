@@ -1,19 +1,19 @@
 import BaseController from "./BaseController";
 import {IModelAttributes} from "../models/types/types";
-import {WS_EVENTS, WS_CREATE_EVENTS} from "./types/const";
+import {WS_BASE_EVENT_ID,WS_EVENT_ID } from "./types/const";
 
 export class ClientController extends BaseController<IModelAttributes.IClient> {
 
-    createEvent(event: number): number {
+    getEventId(event: number): number {
 
         switch (event) {
-            case WS_CREATE_EVENTS.CREATED:
-                return WS_EVENTS.CLIENT_CREATED;
-            case WS_CREATE_EVENTS.UPDATED:
-                return WS_EVENTS.CLIENT_UPDATED;
-            case WS_CREATE_EVENTS.DELETED:
-                return WS_EVENTS.CLIENT_DELETED;
-            default: return WS_EVENTS.NONE
+            case WS_BASE_EVENT_ID.CREATED:
+                return WS_EVENT_ID.CLIENT_CREATED;
+            case WS_BASE_EVENT_ID.UPDATED:
+                return WS_EVENT_ID.CLIENT_UPDATED;
+            case WS_BASE_EVENT_ID.DELETED:
+                return WS_EVENT_ID.CLIENT_DELETED;
+            default: return WS_EVENT_ID.NONE
 
         }
     }

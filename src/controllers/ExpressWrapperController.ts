@@ -1,8 +1,11 @@
+
 import type BaseController from "./BaseController";
 import type {Request, Response} from "express";
 import {IModelAttributes} from "../models/types/types";
 import type {WebSocketController} from "@/controllers/WebSocketController";
-import {WS_CREATE_EVENTS} from "./types/const";
+import {WS_BASE_EVENT_ID} from "./types/const";
+
+const modelNotFount = 'Can not find model';
 
 export default class ExpressWrapperController<I extends IModelAttributes.IBase> {
 
@@ -16,43 +19,41 @@ export default class ExpressWrapperController<I extends IModelAttributes.IBase> 
 
     async findAll(req: Request, res: Response) {
         const query = req.query;
-        const limit = (query.limit as number | undefined) || 10;
+        const limit = query.limit as number | undefined;
         const offset = query.offset as number | undefined;
-        let options = {};
-        if (limit !== 0) {
-            options = {
-                offset: offset,
-            }
-        } else {
-            options = {
-                limit: limit,
-                offset: offset,
-            }
-        }
-        try {
-            this._controller.findAll(options).then(data => {
+        const where = {};
+        const options={
+            limit,
+            offset,
+            where,
+        };
+
+
+        this._controller.findAll(options).then(data => {
+            if (data) {
                 return res.json(data)
-            })
-        } catch (e) {
+            }
+
             return res.json({
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                msg: e.toString(),
-                status: 500,
+                msg: 'Records not found',
+                status: 404,
                 route: "/list"
             });
-        }
+        })
+
     }
 
     async create(req: Request, res: Response) {
         try {
             this._controller.create({...req.body}).then(data => {
-                const event = this._controller.createEvent(WS_CREATE_EVENTS.CREATED)
+                const event = this._controller.getEventId(WS_BASE_EVENT_ID.CREATED);
+
                 this._wsController.send({
                     event: event,
-                    payload: data
-                })
-                return res.json(data)
+                    payload: data,
+                });
+
+                return res.json(data);
             });
         } catch (e) {
             return res.json({
@@ -64,18 +65,17 @@ export default class ExpressWrapperController<I extends IModelAttributes.IBase> 
     }
 
     async find(req: Request, res: Response) {
-        try {
             const {id} = req.params;
-            this._controller.findOne(id).then(data => {
-                return res.json({data})
+            this._controller.findOne({where: {id}}).then(data => {
+                if(data){
+                    return res.json({data})
+                }
+                return res.json({
+                    msg: modelNotFount,
+                    status: 500,
+                    route: "/find/:id",
+                });
             })
-        } catch (e) {
-            return res.json({
-                msg: e,
-                status: 500,
-                route: "/find/:id",
-            });
-        }
     }
 
     async update(req: Request, res: Response) {
@@ -84,8 +84,8 @@ export default class ExpressWrapperController<I extends IModelAttributes.IBase> 
 
         try {
 
-            this._controller.findOne(id).then(data => {
-                return res.json({data, msg: "model updated"})
+            this._controller.findOne({where: {id}}).then(data => {
+                return res.json({data})
             })
 
         } catch (e) {
@@ -103,7 +103,7 @@ export default class ExpressWrapperController<I extends IModelAttributes.IBase> 
 
         try {
 
-            this._controller.findOne(id).then(() => {
+            this._controller.findOne({where: {id}}).then(() => {
                 return res.json({msg: "model deleted"})
             })
 

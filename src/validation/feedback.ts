@@ -9,12 +9,9 @@ export class FeedbackValidator extends BaseValidator{
             body('description')
                 .notEmpty()
                 .withMessage('The description value should not be empty'),
-            body('creatorId')
-                .isEmpty()
-                .bail()
-                .if(body('email').exists())
+            body('email')
                 .notEmpty()
-                .withMessage('The creatorId or email should not be empty')
+                .withMessage('The email value should not be empty')
         ];
     }
 
